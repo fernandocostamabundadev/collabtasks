@@ -1,0 +1,21 @@
+# Dependencies
+backend/node_modules/
+
+# Build output
+backend/dist/
+backend/coverage/
+backend/*.tsbuildinfo
+
+# Environment variables
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# Logs
+backend/*.log
+npm-debug.log*
+
+# Local/editor files
+.DS_Store
+Thumbs.db
+.vscode/
