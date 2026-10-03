@@ -20,6 +20,10 @@ import { TaskController } from "./modules/tasks/controllers/task.controller.js";
 import { TaskRepositori } from "./modules/tasks/repositories/task.repositori.js";
 import { createTaskRouter } from "./modules/tasks/routes/task.routes.js";
 import { TaskService } from "./modules/tasks/services/task.service.js";
+import { TeamController } from "./modules/team/controllers/team.controller.js";
+import { TeamRepositorie } from "./modules/team/repositories/team.repositorie.js";
+import { createTeamRouter } from "./modules/team/routes/team.route.js";
+import { TeamService } from "./modules/team/services/team.service.js";
 
 dotenv.config();
 
@@ -141,6 +145,16 @@ if (process.env.NODE_ENV === "production") {
     "/tasks",
     createDevelopmentAuthMiddleware(devTokenSecret),
     createTaskRouter(taskController),
+  );
+
+  const teamRepository = new TeamRepositorie();
+  const teamService = new TeamService(teamRepository);
+  const teamController = new TeamController(teamService);
+
+  app.use(
+    "/teams",
+    createDevelopmentAuthMiddleware(devTokenSecret),
+    createTeamRouter(teamController),
   );
 }
 
