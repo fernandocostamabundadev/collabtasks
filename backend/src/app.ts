@@ -24,6 +24,10 @@ import { TeamController } from "./modules/team/controllers/team.controller.js";
 import { TeamRepositorie } from "./modules/team/repositories/team.repositorie.js";
 import { createTeamRouter } from "./modules/team/routes/team.route.js";
 import { TeamService } from "./modules/team/services/team.service.js";
+import { UserController } from "./modules/users/controllers/user.controller.js";
+import { UserRepositorie } from "./modules/users/repositories/user.repositorie.js";
+import { createUserRouter } from "./modules/users/routes/user.routes.js";
+import { UserService } from "./modules/users/services/user.service.js";
 
 dotenv.config();
 
@@ -81,7 +85,16 @@ function createDevelopmentAuthMiddleware(secret: string): RequestHandler {
         return;
       }
 
-      res.locals.user = { id: decodedPayload.sub };
+      const role =
+        "role" in decodedPayload &&
+        (decodedPayload.role === "admin" || decodedPayload.role === "user")
+          ? decodedPayload.role
+          : undefined;
+
+      res.locals.user = {
+        id: decodedPayload.sub,
+        ...(role === undefined ? {} : { role }),
+      };
       next();
     } catch {
       res.status(401).json({ message: "Token inválido." });
@@ -155,6 +168,16 @@ if (process.env.NODE_ENV === "production") {
     "/teams",
     createDevelopmentAuthMiddleware(devTokenSecret),
     createTeamRouter(teamController),
+  );
+
+  const userRepository = new UserRepositorie();
+  const userService = new UserService(userRepository);
+  const userController = new UserController(userService);
+
+  app.use(
+    "/users",
+    createDevelopmentAuthMiddleware(devTokenSecret),
+    createUserRouter(userController),
   );
 }
 
