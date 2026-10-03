@@ -1,0 +1,22 @@
+{
+  "name": "api-collabtasks",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "Node",
+    "Express",
+    "Prisma",
+    "PostgreSQL"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git"
+  },
+  "license": "MIT",
+  "author": "Fernando Costa Mabunda",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
