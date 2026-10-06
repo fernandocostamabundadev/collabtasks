@@ -20,6 +20,7 @@ import { TaskController } from "./modules/tasks/controllers/task.controller.js";
 import { TaskRepositori } from "./modules/tasks/repositories/task.repositori.js";
 import { createTaskRouter } from "./modules/tasks/routes/task.routes.js";
 import { TaskService } from "./modules/tasks/services/task.service.js";
+import { prisma } from "./shared/database/prisma.js";
 
 dotenv.config();
 
@@ -90,7 +91,7 @@ if (process.env.NODE_ENV === "production") {
     throw new Error("AUTH_TOKEN_SECRET é obrigatório em produção.");
   }
 } else {
-  const authRepository = new AuthRepositorie();
+  const authRepository = new AuthRepositorie(prisma);
   const devTokenSecret =
     process.env.AUTH_TOKEN_SECRET ?? randomBytes(32).toString("hex");
   const authService = new AuthService(authRepository, {
@@ -133,7 +134,7 @@ if (process.env.NODE_ENV === "production") {
     createAuthRouter(new AuthController(authService)),
   );
 
-  const taskRepository = new TaskRepositori();
+  const taskRepository = new TaskRepositori(prisma);
   const taskService = new TaskService(taskRepository);
   const taskController = new TaskController(taskService);
 
